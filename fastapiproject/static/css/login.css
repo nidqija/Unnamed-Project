@@ -1,0 +1,61 @@
+/* Center the whole page and make the login box responsive */
+html, body {
+    height: 100%;
+}
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff;
+    font-family: 'Poppins';
+
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Utility class to apply Montserrat when needed */
+.montserrat {
+    font-family: 'Montserrat';
+}
+
+h1 {
+    text-align: center;
+    margin: 0 0 18px 0;
+}
+
+.login-form {
+    padding: 35px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    max-width: 720px;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+
+
+.btn.btn-primary {
+        border-color: rgb(197, 25, 25);
+        background-color: rgb(197, 25, 25);
+        border-radius: 10px;
+}
+
+.btn.btn-primary:hover {
+    border-color: rgb(130, 14, 14);
+    background-color: rgb(130, 14, 14);
+}
+
+form .form-control {
+        width: 350px;
+        font-family: inherit; 
+}
+
+.login-form .form-label,
+.login-form button,
+.login-form .invalid-feedback {
+    font-family: inherit;
+}

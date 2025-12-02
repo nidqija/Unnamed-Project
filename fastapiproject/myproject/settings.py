@@ -122,3 +122,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# --- ADD THESE CONFIGURATIONS ---
+
+# 1. Tells Django where to look for static files at the project level
+STATICFILES_DIRS = [
+    # Uses pathlib.Path to create the correct path to the 'static' directory
+    # located next to manage.py (i.e., BASE_DIR/static)
+    BASE_DIR / 'static', 
+]
+
+# 2. Where Django collects all static files for deployment (production)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
