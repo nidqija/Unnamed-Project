@@ -131,12 +131,77 @@
                 <p class="text-muted mb-0">Real-time laboratory resource monitoring.</p>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn btn-white bg-white border shadow-sm d-flex align-items-center text-secondary">
-                    <i class="fa-solid fa-download me-2"></i> Export
-                </button>
-                <button class="btn btn-primary d-flex align-items-center shadow-sm">
+               
+                <button class="btn btn-primary d-flex align-items-center shadow-sm"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <i class="fa-solid fa-plus me-2"></i> New Entry
                 </button>
+
+                <!-- Modal -->
+   <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Admin Modal</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+   <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Review User Requests</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Add Items</button>
+  </li>
+  
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    <div class="container mt-3">
+     <div >
+    <div class="card mb-3">
+  <div class="card-body">
+    <h4>User Name</h4>
+  </div>
+</div>
+  <div class="card mb-3">
+  <div class="card-body">
+        <h4>User Name</h4>
+
+  </div>
+</div>
+   <div class="card mb-3">
+  <div class="card-body">
+        <h4>User Name</h4>
+
+  </div>
+</div>
+</div>
+     </div>
+
+  </div>
+  <div class="container mt-3">
+  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+     <form action="post">
+    <div class="mb-3">
+      <label for="itemName" class="form-label">Item Name</label>
+      <input type="text" class="form-control" id="itemName" name="item_name" required>
+    </div>
+    <div class="mb-3">
+      <label for="itemAmount" class="form-label">Item Amount</label>
+      <input type="number" class="form-control" id="itemAmount" name="item_amount" required>
+     </form>
+    </div>
+</div>
+  </div>
+
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+   </div>
             </div>
         </div>
 
@@ -159,10 +224,7 @@
                         <div class="progress mb-2" style="height: 6px;">
                             <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
                         </div>
-                        <div class="d-flex align-items-center small">
-                            <span class="text-success fw-bold me-2"><i class="fa-solid fa-arrow-up"></i> 12%</span>
-                            <span class="text-muted">from last month</span>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -183,10 +245,7 @@
                         <div class="progress mb-2" style="height: 6px;">
                             <div class="progress-bar bg-info" role="progressbar" style="width: 92%"></div>
                         </div>
-                        <div class="d-flex align-items-center small">
-                            <span class="text-success fw-bold me-2"><i class="fa-solid fa-arrow-up"></i> 4%</span>
-                            <span class="text-muted">new arrivals</span>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -207,10 +266,7 @@
                         <div class="progress mb-2" style="height: 6px;">
                             <div class="progress-bar bg-success" role="progressbar" style="width: 45%"></div>
                         </div>
-                        <div class="d-flex align-items-center small">
-                            <span class="text-danger fw-bold me-2"><i class="fa-solid fa-arrow-down"></i> 2%</span>
-                            <span class="text-muted">vs yesterday</span>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -231,10 +287,7 @@
                         <div class="progress mb-2" style="height: 6px;">
                             <div class="progress-bar bg-warning" role="progressbar" style="width: 15%"></div>
                         </div>
-                        <div class="d-flex align-items-center small">
-                            <span class="text-warning fw-bold me-2"><i class="fa-solid fa-triangle-exclamation"></i> Alert</span>
-                            <span class="text-muted">needs attention</span>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
