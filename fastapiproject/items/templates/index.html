@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Club Website</title>
+  <style>
+    /* ---------- Basic page and font ---------- */
+    body {
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 0;
+      background: #fafafa;
+      color: #222;
+    }
+
+    /* ---------- Header (site name + login button on same line) ---------- */
+    .header {
+      display: flex;               /* put children on one line */
+      align-items: center;         /* vertically center items */
+      justify-content: space-between; /* push logo left and button right */
+      padding: 16px 24px;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      position: sticky;            /* stays at top when scrolling */
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .login-btn {
+      background: #d32f2f; /* red button */
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .login-btn:hover { filter: brightness(0.95); }
+
+    /* ---------- Center content area (blank page look) ---------- */
+    .main {
+      padding: 80px 20px;
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .placeholder {
+      color: #777;
+      text-align: center;
+    }
+
+    /* ---------- Modal overlay and box (the login form) ---------- */
+    .modal {
+      position: fixed;
+      inset: 0;                   /* top:0; right:0; bottom:0; left:0; */
+      display: none;              /* hidden by default */
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4); /* dim the background */
+      z-index: 50;
+    }
+
+    .modal[aria-hidden="false"] {
+      display: flex;              /* show when not hidden */
+    }
+
+    .modal-card {
+      background: white;
+      width: 340px;
+      max-width: calc(100% - 40px);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+    }
+
+    .modal-card h2 {
+      margin: 0 0 14px 0;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .form-row {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .submit-row {
+      text-align: left;
+      margin-top: 12px;
+    }
+
+    .submit-btn {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    /* Small responsive tweaks */
+    @media (max-width: 420px) {
+      .modal-card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header with site name and login button -->
+  <header class="header">
+    <div class="logo">Club Website</div>
+    <button id="openLogin" class="login-btn" aria-haspopup="dialog">Login</button>
+  </header>
+
+  <!-- Main blank area -->
+  <main class="main">
+    <div class="placeholder">
+      <h1>Welcome to Club Website</h1>
+      <p>Click <strong>Login</strong> at the top-right to open the admin login form.</p>
+    </div>
+  </main>
+
+  <!-- Modal: hidden by default; becomes visible when Login is clicked -->
+  <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="loginTitle">
+    <div class="modal-card" role="document">
+      <button class="modal-close" id="closeLogin" aria-label="Close">&times;</button>
+
+      <h2 id="loginTitle">Admin Login Page</h2>
+
+      <!-- The login form -->
+      <form id="loginForm" autocomplete="off">
+        <div class="form-row">
+          <label for="specialId">Special Student ID</label>
+          <input id="specialId" name="specialId" type="text" placeholder="Enter special ID">
+        </div>
+
+        <div class="form-row">
+          <label for="studentId">Student ID</label>
+          <input id="studentId" name="studentId" type="text" placeholder="Enter student ID">
+        </div>
+
+        <div class="form-row">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Password">
+        </div>
+
+        <div class="submit-row">
+          <button class="submit-btn" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ---------- DOM references ----------
+    const openBtn = document.getElementById('openLogin');
+    const modal = document.getElementById('loginModal');
+    const closeBtn = document.getElementById('closeLogin');
+    const form = document.getElementById('loginForm');
+
+    // ---------- open/close helpers ----------
+    function openModal() {
+      modal.setAttribute('aria-hidden', 'false'); // visible to screen readers
+      // Optional: set focus to first input for convenience
+      document.getElementById('specialId').focus();
+      // Prevent background from scrolling
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.setAttribute('aria-hidden', 'true'); // hide
+      document.body.style.overflow = '';
+      openBtn.focus(); // return keyboard focus to the login button
+    }
+
+    // ---------- events ----------
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    // Close when clicking the dimmed background (but not when clicking the modal card itself)
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeModal();
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+        closeModal();
+      }
+    });
+
+    // Handle the form submit (example: prevent default and show inputs in console)
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // prevent page reload
+      const data = {
+        specialId: form.specialId.value.trim(),
+        studentId: form.studentId.value.trim(),
+        password: form.password.value
+      };
+      // For demo: just print values to console, then close modal
+      console.log('Login submit:', data);
+      // Here you would normally send data to your backend with fetch()/XHR
+      closeModal();
+      alert('Login submitted (demo). Check console for values.)');
+    });
+  </script>
+</body>
+</html>
