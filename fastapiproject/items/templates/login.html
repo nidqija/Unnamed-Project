@@ -18,19 +18,16 @@
 <body>
     <h1 class="montserrat"><strong>Admin Login Page</strong></h1>
     <!-- Use action + method so the form submits normally; remove inline JS navigation -->
-    <form class="login-form"  method="post">
+    <form class="login-form"  method="post" action="{% url 'login' %}">
         {% csrf_token %}
+       
         <div class="mb-3">
-            <label class="form-label" for="special-id">Special Student ID</label>
-            <input type="text" class="form-control" id="special-id" name="special_id" required>
+            <label class="form-label" for="staff-id">Staff ID</label>
+            <input type="text" class="form-control" id="staff-id" name="staff_id" required>
         </div>
         <div class="mb-3">
-            <label class="form-label" for="student-id">Student ID</label>
-            <input type="text" class="form-control" id="student-id" name="student_id" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required minlength="6">
+            <label class="form-label" for="admin_password">Password</label>
+            <input type="password" class="form-control" id="admin_password" name="admin_password" required minlength="6">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

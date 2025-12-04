@@ -6,8 +6,7 @@ from django.db import models
 
 class Admin(models.Model):
    admin_id = models.AutoField(primary_key=True , default=1)
-   admin_name = models.CharField(max_length=255)
-   admin_email = models.EmailField(unique=True)
+   staff_id = models.CharField(max_length=255)
    admin_password = models.CharField(max_length=255)
 
 
