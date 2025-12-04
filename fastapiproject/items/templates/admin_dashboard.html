@@ -106,8 +106,8 @@
                         <a href="#" class="d-flex align-items-center text-decoration-none text-light dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown">
                             <img src="https://ui-avatars.com/api/?name=Admin+User&background=0d6efd&color=fff" alt="" width="32" height="32" class="rounded-circle me-2">
                             <div class="d-none d-lg-block">
-                                
-                                <div class="small fw-bold">Admin User</div>
+
+                                <div class="small fw-bold">{{ admin.staff_id }}</div>
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end mt-2">
@@ -182,7 +182,8 @@
   </div>
   <div class="container mt-3">
   <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-     <form action="post">
+     <form method="post" action="{% url 'admin_dashboard' %}">
+        {% csrf_token %}
     <div class="mb-3">
       <label for="itemName" class="form-label">Item Name</label>
       <input type="text" class="form-control" id="itemName" name="item_name" required>
@@ -190,8 +191,11 @@
     <div class="mb-3">
       <label for="itemAmount" class="form-label">Item Amount</label>
       <input type="number" class="form-control" id="itemAmount" name="item_amount" required>
-     </form>
+   
     </div>
+
+    <button type="submit" class="btn btn-primary">Add Item</button>
+      </form>
 </div>
   </div>
 
