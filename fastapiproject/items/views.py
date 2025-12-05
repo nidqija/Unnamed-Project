@@ -89,3 +89,21 @@ def register_user(request):
 
         return redirect(reserve_page)
     return render(request , 'user_register.html')
+
+
+def user_login(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        password = request.POST.get('password')
+
+        try:
+             user = User.objects.get(student_id=student_id , password=password)
+             request.session['user_id'] = user.user_id
+             return redirect(reserve_page )
+
+        except User.DoesNotExist:
+             print("Invalid user credentials")
+             return render(request , 'user_login.html')
+
+    return render(request , 'user_login.html')
+
