@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login 
 from django.conf import settings
-from .models import Admin , Item
+from .models import Admin , Item , User
 
 def index(request):
     return render(request, 'login.html')
@@ -75,3 +75,17 @@ def custom_admin_login(request):
 
 def reserve_page(request):
     return render(request , 'reserve.html')
+
+
+def register_user(request):
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        student_id = request.POST.get('student_id')
+        password = request.POST.get('password')
+
+        user = User(full_name=full_name , student_id=student_id , password=password)
+        user.save()
+
+        return redirect(reserve_page)
+    return render(request , 'user_register.html')

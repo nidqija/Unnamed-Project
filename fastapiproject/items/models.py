@@ -9,7 +9,18 @@ class Admin(models.Model):
    staff_id = models.CharField(max_length=255)
    admin_password = models.CharField(max_length=255)
 
+class User(models.Model):
+      user_id = models.AutoField(primary_key=True)
+      full_name = models.CharField(max_length=150, unique=True)
+      student_id = models.CharField(max_length=50, unique=True)
+      password = models.CharField(max_length=255)
+      
 
+class UserItemReservation(models.Model):
+     reserve_id = models.AutoField(primary_key=True)
+     user_id = models.ForeignKey(User , on_delete=models.CASCADE)
+     item_id = models.ForeignKey('Item' , on_delete=models.CASCADE)
+     deadline_time = models.DateField()
 
 
 class Item(models.Model):
