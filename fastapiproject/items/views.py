@@ -74,7 +74,12 @@ def custom_admin_login(request):
 
 
 def reserve_page(request):
-    return render(request , 'reserve.html')
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('user_login')
+
+    user = User.objects.get(user_id=user_id)
+    return render(request , 'reserve.html', {'user': user})
 
 
 def register_user(request):
@@ -107,3 +112,11 @@ def user_login(request):
 
     return render(request , 'user_login.html')
 
+
+def user_dashboard(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('user_login')
+
+    user = User.objects.get(user_id=user_id)
+    return render(request , 'user_dashboard.html', {'user': user})

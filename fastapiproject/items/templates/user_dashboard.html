@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Resource User System</title>
+    <!-- Bootstrap 5.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons (for better dashboard look) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --bg-color: #f8f9fa;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        /* Nav Buttons (using a Bootstrap style override) */
+        .nav-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: 500;
+            border: none;
+            transition: background 0.3s;
+        }
+        .nav-btn:hover {
+             background: #157347; /* Darker green on hover */
+        }
+        
+        /* --- SECTION MANAGEMENT (Internal Routing) --- */
+        section {
+            display: none;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .active {
+            display: block;
+        }
+
+        /* --- CARD STYLING (Used on Home and Dashboard) --- */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        /* --- DASHBOARD SPECIFIC STYLING --- */
+        .dashboard-card {
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+        }
+        .border-start-4 {
+            border-left: 4px solid;
+        }
+        
+        .nav-tabs .nav-link.active {
+            font-weight: 600;
+            color: var(--primary-color) !important;
+            border-bottom: 3px solid var(--primary-color);
+            border-color: #dee2e6 #dee2e6 var(--primary-color) !important;
+            background-color: #fff;
+        }
+        
+        table {
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        /* General form/button styles */
+        button {
+            padding: 8px 12px;
+            background: #007bff;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR SECTION -->
+    <div class="navbar">
+        <div class="fw-bold fs-5"><i class="bi bi-cpu-fill me-2 text-info"></i>STEM User System</div>
+
+        <!-- Buttons for switching page sections -->
+        <div>
+            <button class="nav-btn btn btn-sm btn-outline-light" ><a href="{% url 'reserve' %}"><i class="bi bi-house-door-fill me-1"></i> Home</a></button>
+            <button class="nav-btn btn btn-sm btn-outline-light bg-primary" onclick="openPage('dashboard')"><i class="bi bi-speedometer2 me-1"></i> Dashboard</button>
+            <button class="nav-btn btn btn-sm btn-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
+        </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <section id="home">
+        <h1 class="mb-4 mt-2 display-6 fw-light"><span>Welcome ,</span><span class="text-primary" id="userName">User Full Name</span></h1>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-3 mb-4">
+                 <div class="card h-100 p-4 shadow-sm border-start border-4 border-info">
+                    <h3 class="fw-semibold text-info">Reserve Lab Equipment</h3>
+                    <p class="text-muted">Borrow lab apparatus and tools.</p>
+                    <button class="btn btn-info text-white mt-auto" onclick="openPage('equip')">Go to Equipment</button>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 p-4 shadow-sm border-start border-4 border-primary">
+                    <h3 class="fw-semibold text-primary">Reserve Lab Venue</h3>
+                    <p class="text-muted">Check available labs & book a time slot.</p>
+                    <button class="btn btn-primary mt-auto" onclick="openPage('venue')">Go to Venues</button>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 p-4 shadow-sm border-start border-4 border-success">
+                    <h3 class="fw-semibold text-success">Search Books / Manuals</h3>
+                    <p class="text-muted">Find resources and bookmark them for later.</p>
+                    <button class="btn btn-success mt-auto" onclick="openPage('books')">Go to Search</button>
+                </div>
+            </div>
+             <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 p-4 shadow-sm border-start border-4 border-warning">
+                    <h3 class="fw-semibold text-warning">Terms & Conditions</h3>
+                    <ul class="text-muted list-unstyled">
+                        <li><i class="bi bi-arrow-right-short"></i> Return items on time (RM1 per hour fine)</li>
+                        <li><i class="bi bi-arrow-right-short"></i> Leave labs before closing (RM5 per hour fine)</li>
+                        <li><i class="bi bi-arrow-right-short"></i> Be responsible for borrowed equipment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESERVE LAB EQUIPMENT PAGE -->
+    <section id="equip">
+        <h1 class="mb-4 mt-2">Reserve Lab Equipment</h1>
+        <p class="text-muted mb-4">Select the equipment you wish to reserve from the list below.</p>
+
+        <div class="card p-0">
+            <div class="table-responsive">
+                <table>
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Available</th>
+                            <th>Reserve</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Beakers (500ml)</td>
+                            <td>12</td>
+                            <td><button class="btn btn-sm btn-success" onclick="reserveEquip('Beakers')"><i class="bi bi-cart-plus me-1"></i> Reserve</button></td>
+                        </tr>
+                        <tr>
+                            <td>Microscopes (Digital)</td>
+                            <td>5</td>
+                            <td><button class="btn btn-sm btn-success" onclick="reserveEquip('Microscope')"><i class="bi bi-cart-plus me-1"></i> Reserve</button></td>
+                        </tr>
+                        <tr>
+                            <td>Test Tube Set (Rack + 10 Tubes)</td>
+                            <td>20</td>
+                            <td><button class="btn btn-sm btn-success" onclick="reserveEquip('Test Tube Set')"><i class="bi bi-cart-plus me-1"></i> Reserve</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="equipMsg" class="mt-3"></div>
+    </section>
+
+    <!-- RESERVE VENUE PAGE -->
+    <section id="venue">
+        <h1 class="mb-4 mt-2">Reserve Lab Venue</h1>
+        <p class="text-muted mb-4">Select an available lab venue and specify your booking purpose.</p>
+
+        <div class="card p-0">
+            <div class="table-responsive">
+                <table>
+                    <thead class="table-light">
+                        <tr>
+                            <th>Lab Name</th>
+                            <th>Status (Current)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Physics Lab 101</td>
+                            <td><span class="badge bg-success">Open</span></td>
+                            <td><button class="btn btn-sm btn-primary" onclick="reserveVenue('Physics Lab')"><i class="bi bi-calendar-plus me-1"></i> Book Slot</button></td>
+                        </tr>
+                        <tr>
+                            <td>Chemistry Lab 205</td>
+                            <td><span class="badge bg-danger">Occupied (Until 16:00)</span></td>
+                            <td><button class="btn btn-sm btn-secondary" disabled>Unavailable</button></td>
+                        </tr>
+                        <tr>
+                            <td>Biology Lab 302</td>
+                            <td><span class="badge bg-success">Open</span></td>
+                            <td><button class="btn btn-sm btn-primary" onclick="reserveVenue('Biology Lab')"><i class="bi bi-calendar-plus me-1"></i> Book Slot</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="venueMsg" class="mt-3"></div>
+    </section>
+
+    <!-- BOOK SEARCH + BOOKMARK PAGE -->
+    <section id="books">
+        <h1 class="mb-4 mt-2">Search Books & Manuals</h1>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control" id="searchInput" placeholder="Search book or manual title..." onkeyup="searchBook()">
+        </div>
+
+        <div id="bookList" class="card">
+            <h4 class="text-muted">Search results will appear here.</h4>
+        </div>
+    </section>
+
+    <!-- DASHBOARD (Integrated High-Fidelity Design) -->
+    <section id="dashboard" class="container-fluid pt-0">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <h1 class="display-6 mt-5 fw-light text-primary">Your Dashboard , {{user.full_name}}</h1>
+                <p class="lead text-secondary">Overview of your activity and current reservations.</p>
+            </div>
+        </div>
+
+        <!-- Reservation Summary Cards -->
+        <div class="row mb-5">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card dashboard-card bg-white h-100 border-start border-4 border-primary">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <i class="bi bi-building-fill fs-2 text-primary"></i>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Venue Reservations</h5>
+                                <p class="h3 fw-bold mb-0" id="venueCount">3 Upcoming</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card dashboard-card bg-white h-100 border-start border-4 border-success">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <i class="bi bi-tools fs-2 text-success"></i>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Equipment Rentals</h5>
+                                <p class="h3 fw-bold mb-0" id="equipmentCount">2 Active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card dashboard-card bg-white h-100 border-start border-4 border-warning">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <i class="bi bi-book-half fs-2 text-warning"></i>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Bookmarked Items</h5>
+                                <p class="h3 fw-bold mb-0" id="bookmarkCount">5 Resources</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card dashboard-card bg-white h-100 border-start border-4 border-danger">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <i class="bi bi-currency-dollar fs-2 text-danger"></i>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Outstanding Fines</h5>
+                                <p class="h3 fw-bold mb-0">RM 1.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Reserved Stuffs Section (Tabbed Interface) -->
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-tabs mb-4" id="reservationTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="venues-tab" data-bs-toggle="tab" data-bs-target="#venues-list" type="button" role="tab" aria-controls="venues-list" aria-selected="true">
+                            <i class="bi bi-map me-1"></i> Reserved Lab Venues
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="equipment-tab" data-bs-toggle="tab" data-bs-target="#equipment-list" type="button" role="tab" aria-controls="equipment-list" aria-selected="false">
+                            <i class="bi bi-tools me-1"></i> Reserved Equipment
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="books-tab" data-bs-toggle="tab" data-bs-target="#books-list" type="button" role="tab" aria-controls="books-list" aria-selected="false">
+                            <i class="bi bi-bookmark-fill me-1"></i> Bookmarks
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="reservationTabsContent">
+                    
+                    <!-- Lab Venues Tab Content -->
+                    <div class="tab-pane fade show active" id="venues-list" role="tabpanel" aria-labelledby="venues-tab">
+                        <div class="card dashboard-card p-0">
+                            <div class="card-header fw-bold">
+                                Upcoming Lab Venue Reservations
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">Venue Name</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Time Slot</th>
+                                                <th scope="col">Purpose</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>CS Lab 201 (AI/ML)</td>
+                                                <td>2025-12-10</td>
+                                                <td>10:00 - 12:00</td>
+                                                <td>Project Group Meeting</td>
+                                                <td><button class="btn btn-sm btn-outline-danger" onclick="cancelReservation('Venue', 'CS Lab 201')">Cancel</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Eng. Workshop 1A</td>
+                                                <td>2025-12-12</td>
+                                                <td>14:00 - 16:30</td>
+                                                <td>Thesis Experiment</td>
+                                                <td><button class="btn btn-sm btn-outline-danger" onclick="cancelReservation('Venue', 'Eng. Workshop 1A')">Cancel</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted text-center">
+                                Showing 2 upcoming reservations.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Equipment Tab Content -->
+                    <div class="tab-pane fade" id="equipment-list" role="tabpanel" aria-labelledby="equipment-tab">
+                        <div class="card dashboard-card p-0">
+                            <div class="card-header fw-bold">
+                                Active Equipment Rentals
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">Equipment</th>
+                                                <th scope="col">ID / Asset Tag</th>
+                                                <th scope="col">Due Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Oscilloscope (Rigol DS1054Z)</td>
+                                                <td>EQ-1034</td>
+                                                <td>2025-12-18</td>
+                                                <td><span class="badge bg-success">On Loan</span></td>
+                                                <td><button class="btn btn-sm btn-outline-info" onclick="viewReturnInfo('EQ-1034')">Return Info</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td>3D Printer Filament (PLA White)</td>
+                                                <td>MAT-559</td>
+                                                <td>2025-12-10</td>
+                                                <td><span class="badge bg-warning text-dark">Due Soon</span></td>
+                                                <td><button class="btn btn-sm btn-outline-success" onclick="requestExtension('MAT-559')">Extend</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted text-center">
+                                Showing 2 active equipment items.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bookmarks Tab Content -->
+                    <div class="tab-pane fade" id="books-list" role="tabpanel" aria-labelledby="books-tab">
+                        <div class="card dashboard-card">
+                            <div class="card-header fw-bold">
+                                Your Bookmarked Resources
+                            </div>
+                            <ul id="bookmarkList" class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    The Art of Electronics
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeBookmark('The Art of Electronics')"><i class="bi bi-x-lg"></i></button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Chemistry Lab Safety Manual
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeBookmark('Chemistry Lab Safety Manual')"><i class="bi bi-x-lg"></i></button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Introduction to Python for Data Science
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeBookmark('Introduction to Python for Data Science')"><i class="bi bi-x-lg"></i></button>
+                                </li>
+                            </ul>
+                            <div class="card-footer text-muted text-center">
+                                Showing 3 bookmarked resources.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Bootstrap JS Bundle (v5.2) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script>
+        // Mock User Data for display
+        const user = {
+            student_id: "S98765",
+            full_name: "Ahmad Bin Zaki",
+            email: "ahmad.zaki@uni.edu"
+        };
+        
+        // Mock list of books for search
+        const mockBooks = [
+            { title: "Organic Chemistry: Principles and Practice", author: "Smith" },
+            { title: "Advanced Quantum Mechanics", author: "Taylor" },
+            { title: "Introduction to Microprocessors", author: "Hassan" },
+            { title: "Python Data Analysis Handbook", author: "Wesley" },
+        ];
+
+
+        // Function to switch visible sections
+        function openPage(pageId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // Ensure the first tab is active when navigating to the dashboard
+                if (pageId === 'dashboard') {
+                    const tabEl = document.getElementById('venues-tab');
+                    if(tabEl) bootstrap.Tab.getInstance(tabEl).show();
+                }
+            }
+        }
+
+        // Initialize and setup user name on load
+        window.onload = function() {
+            document.getElementById('userName').textContent = user.full_name;
+            openPage('dashboard'); // Start on the dashboard by default
+        };
+
+        // --- Mock Reservation Functions ---
+        function reserveEquip(item) {
+            console.log(`Requesting reservation for: ${item}`);
+            showToast(`Reservation request sent for: ${item}. Check dashboard for approval.`, 'success');
+        }
+
+        function reserveVenue(lab) {
+            console.log(`Requesting reservation for: ${lab}`);
+            showToast(`Booking slot requested for: ${lab}. Please specify details.`, 'primary');
+        }
+
+        function cancelReservation(type, item) {
+            console.log(`Cancelling ${type} reservation for: ${item}`);
+            showToast(`Cancelled reservation for ${item}.`, 'danger');
+        }
+
+        function viewReturnInfo(assetId) {
+             showToast(`Asset ${assetId} return instructions: Drop off at counter 3 by due date.`, 'info');
+        }
+
+        function requestExtension(assetId) {
+             showToast(`Extension requested for asset ${assetId}. Pending approval.`, 'warning');
+        }
+
+        function removeBookmark(title) {
+             showToast(`Removed bookmark: ${title}`, 'danger');
+             // In a real app, update the bookmark list UI here
+        }
+
+        function bookmarkBook(title) {
+            showToast(`Bookmarked: ${title}`, 'success');
+            // In a real app, add to the bookmark list UI here
+        }
+
+        // --- Search Function ---
+        function searchBook() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '';
+
+            const results = mockBooks.filter(book => 
+                book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
+            );
+
+            if (results.length === 0) {
+                bookList.innerHTML = `<h4 class="text-muted p-3">No results found for "${query}".</h4>`;
+                return;
+            }
+
+            const ul = document.createElement('ul');
+            ul.className = 'list-group list-group-flush';
+            
+            results.forEach(book => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <div>
+                        <strong class="text-primary">${book.title}</strong>
+                        <small class="text-muted d-block">Author: ${book.author}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-warning" onclick="bookmarkBook('${book.title}')">
+                        <i class="bi bi-bookmark-plus-fill me-1"></i> Bookmark
+                    </button>
+                `;
+                ul.appendChild(li);
+            });
+            bookList.appendChild(ul);
+        }
+        
+        // --- Logout Function ---
+        function handleLogout() {
+            console.log('User logged out successfully.');
+            showToast('<i class="bi bi-box-arrow-right me-2"></i>You have been logged out.', 'danger'); 
+            
+            // Simulate redirect to login page after 2 seconds
+            setTimeout(() => {
+                // In a real app, you would redirect here
+                console.log('Redirecting...');
+                openPage('home'); // Just redirect to home page for simulation
+            }, 2000);
+        }
+        
+        // --- Custom Toast/Alert Function (Instead of alert()) ---
+        function showToast(message, type = 'info') {
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            toastContainer.innerHTML = `
+                <div class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toastContainer);
+            
+            const toastEl = toastContainer.querySelector('.toast');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            
+            toastEl.addEventListener('hidden.bs.toast', function () {
+                toastContainer.remove();
+            })
+        }
+    </script>
+</body>
+</html>

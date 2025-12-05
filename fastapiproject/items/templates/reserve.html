@@ -108,11 +108,8 @@
 
         <!-- Buttons for switching page sections -->
         <div>
-            <button class="nav-btn" onclick="openPage('home')">Home</button>
-            <button class="nav-btn" onclick="openPage('equip')">Reserve Equipment</button>
-            <button class="nav-btn" onclick="openPage('venue')">Reserve Venue</button>
-            <button class="nav-btn" onclick="openPage('books')">Books & Manuals</button>
-            <button class="nav-btn" onclick="openPage('dashboard')">Dashboard</button>
+         
+            <button class="nav-btn" ><a href="{% url 'user_dashboard' %}">Dashboard</a></button>
         </div>
     </div>
 
@@ -121,7 +118,7 @@
         Shows the four main functions.
     -->
     <section id="home" class="active">
-        <h1>Home Page</h1>
+        <h1 class="mb-5 mt-2"><span>Welcome ,</span>{{ user.full_name }}</h1>
 
         <div class="card">
             <h3>Reserve Lab Equipment</h3>
