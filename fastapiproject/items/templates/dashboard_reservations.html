@@ -1,0 +1,58 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}My Reservations - STEM Resource Access Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>📅 My Reservations</h1>
+    <p>Manage your current and upcoming bookings.</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Item/Lab</th>
+                <th>Type</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="myReservationsTable">
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.item }}</td>
+                <td>{{ reservation.type }}</td>
+                <td>{{ reservation.date_time }}</td>
+                <td><span class="status status-{{ reservation.status }}">{{ reservation.status }}</span></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="cancelReservation('{{ reservation.id }}')">
+                        Cancel
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No reservations found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>⚠️ Cumulative Fines</h2>
+    <div id="finesDetails">
+        {% for fine in fines %}
+        <p><strong>{{ fine.reason }}</strong> - RM {{ fine.amount }} ({{ fine.date }})</p>
+        {% empty %}
+        <p>No cumulative fines</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function cancelReservation(reservationId) {
+        alert("Cancellation logic to be implemented via backend for ID: " + reservationId);
+    }
+</script>
+{% endblock %}

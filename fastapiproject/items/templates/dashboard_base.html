@@ -1,0 +1,1347 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Resource Access Hub - MMU Carnival 2025</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .login-btn {
+            background: #2196F3;
+        }
+
+        .login-btn:hover {
+            background: #0b7dda;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            color: #444;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        /* Forms and Inputs */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .data-table th {
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .data-table tr.reserved {
+            background: #ffebee;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #f57c00;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Status Indicators */
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-reserved {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .status-in-use {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Dashboard Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .data-table {
+                font-size: 0.875rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">🔬 STEM Resource Hub</div>
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="showPage('home')">🏠 Home</button>
+            <button class="nav-btn" onclick="showPage('equipment')">🔧 Equipment</button>
+            <button class="nav-btn" onclick="showPage('labs')">🏢 Labs</button>
+            <button class="nav-btn" onclick="showPage('resources')">📚 Resources</button>
+            <button class="nav-btn" onclick="showPage('dashboard')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="showPage('reservations')">📅 My Reservations</button>
+        </div>
+        <div class="user-info">
+            <span id="currentUser">Guest User</span>
+            <button class="nav-btn login-btn" onclick="toggleLogin()">👤 Login</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+       
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="card">
+                <h1>Welcome to STEM Resource Access Hub</h1>
+                <p>Centralized platform for accessing STEM labs, equipment, and research resources at MMU.</p>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h3>🔧 Reserve Equipment</h3>
+                        <p>Browse and reserve laboratory equipment for your projects and research.</p>
+                        <button class="btn btn-primary" onclick="showPage('equipment')">View Equipment</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🏢 Book Labs</h3>
+                        <p>Schedule time in STEM laboratories for your experiments and group work.</p>
+                        <button class="btn btn-primary" onclick="showPage('labs')">View Labs</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>📚 Learning Resources</h3>
+                        <p>Access manuals, research papers, and educational materials.</p>
+                        <button class="btn btn-primary" onclick="showPage('resources')">View Resources</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>📊 Usage Analytics</h3>
+                        <p>View your resource usage history and analytics.</p>
+                        <button class="btn btn-primary" onclick="showPage('dashboard')">View Dashboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📋 Terms & Conditions</h2>
+                <ul>
+                    <li>Equipment must be returned on time (RM1 per hour late fee)</li>
+                    <li>Labs must be vacated by closing time (RM5 per hour overtime fee)</li>
+                    <li>Users are responsible for borrowed equipment</li>
+                    <li>Report any damages immediately</li>
+                    <li>Clean up after using lab facilities</li>
+                </ul>
+                <div class="alert alert-info">
+                    <strong>Note:</strong> Last updated: December 3, 2025
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipment Page -->
+        <div id="equipment" class="page">
+            <div class="card">
+                <h1>🔧 Laboratory Equipment</h1>
+                <p>Browse available equipment and make reservations.</p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Available</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipmentTable">
+                        <!-- Equipment will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Labs Page -->
+        <div id="labs" class="page">
+            <div class="card">
+                <h1>🏢 STEM Laboratories</h1>
+                <p>Schedule time in available laboratories.</p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Lab Name</th>
+                            <th>Capacity</th>
+                            <th>Schedule</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="labsTable">
+                        <!-- Labs will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resources Page -->
+        <div id="resources" class="page">
+            <div class="card">
+                <h1>📚 Learning Resources</h1>
+                <p>Search and bookmark educational materials.</p>
+                
+                <div class="form-group">
+                    <input type="text" id="searchResources" class="form-control" 
+                           placeholder="Search for books, manuals, or research papers..." 
+                           onkeyup="searchResources()">
+                </div>
+                
+                <div id="resourcesList" class="grid">
+                    <!-- Resources will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <div class="card">
+                <h1>📊 User Dashboard</h1>
+                <p>Your STEM resource usage analytics.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalReservations">0</div>
+                        <div class="stat-label">Total Reservations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeBookings">0</div>
+                        <div class="stat-label">Active Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="bookmarksCount">0</div>
+                        <div class="stat-label">Bookmarks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="finesAmount">RM 0</div>
+                        <div class="stat-label">Cumulative Fines</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>📅 Recent Reservations</h2>
+                    <div id="recentReservations">
+                        <p>No recent reservations</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>⭐ Bookmarked Resources</h2>
+                    <ul id="bookmarkedList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Reservations Page -->
+        <div id="reservations" class="page">
+            <div class="card">
+                <h1>📅 My Reservations</h1>
+                <p>Manage your current and upcoming bookings.</p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Item/Lab</th>
+                            <th>Type</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myReservationsTable">
+                        <!-- Reservations will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>⚠️ Cumulative Fines</h2>
+                <div id="finesDetails">
+                    <p>No culmulative fines</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================
+        // APPLICATION STATE
+        // ====================
+        let currentUser = null;
+        let isLoggedIn = false;
+
+        // Sample data - In real app, this would come from a database
+        const equipmentData = [
+            { id: 1, name: "Microscope", available: 15, total: 15, location: "Biology Lab", status: "available" },
+            { id: 2, name: "Oscilloscope", available: 18, total: 18, location: "Physics Lab", status: "available" },
+            { id: 3, name: "Centrifuge", available: 10, total: 10, location: "Chemistry Lab", status: "available" },
+            { id: 4, name: "3D Printer", available: 10, total: 10, location: "Engineering Lab", status: "available" },
+            { id: 5, name: "Spectrometer", available: 10, total: 10, location: "Chemistry Lab", status: "available" }
+        ];
+
+        const labsData = [
+            { id: 1, name: "Physics Lab", capacity: 20, schedule: "Mon-Fri 9AM-5PM", status: "available" },
+            { id: 2, name: "Chemistry Lab", capacity: 15, schedule: "Mon-Fri 10AM-6PM", status: "available" },
+            { id: 3, name: "Biology Lab", capacity: 25, schedule: "Mon-Fri 8AM-4PM", status: "available" },
+            { id: 4, name: "Computer Lab", capacity: 30, schedule: "24/7 Access", status: "available" },
+            { id: 5, name: "Engineering Lab", capacity: 20, schedule: "Mon-Sat 9AM-7PM", status: "available" }
+        ];
+
+        const resourcesData = [
+            { id: 1, title: "Engineering Materials Handbook", type: "book", category: "Engineering" },
+            { id: 2, title: "Biology Lab Manual", type: "manual", category: "Biology" },
+            { id: 3, title: "Physics Experiment Guide", type: "guide", category: "Physics" },
+            { id: 4, title: "Chemistry Safety Procedures", type: "manual", category: "Chemistry" },
+            { id: 5, title: "Robotics Programming Basics", type: "ebook", category: "Computer Science" },
+            { id: 6, title: "Research Paper: AI in STEM", type: "paper", category: "Research" }
+        ];
+
+        let userReservations = [];
+        let userBookmarks = [];
+        let userFines = [];
+
+        // ====================
+        // PAGE MANAGEMENT
+        // ====================
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update page-specific data
+            if (pageId === 'equipment') loadEquipment();
+            if (pageId === 'labs') loadLabs();
+            if (pageId === 'resources') loadResources();
+            if (pageId === 'dashboard') updateDashboard();
+            if (pageId === 'reservations') loadUserReservations();
+        }
+
+        // ====================
+        // USER AUTHENTICATION
+        // ====================
+        function toggleLogin() {
+            const modal = document.getElementById('loginModal');
+            if (isLoggedIn) {
+                logout();
+            } else {
+                modal.style.display = 'block';
+                document.getElementById('userId').focus();
+            }
+        }
+
+        function login() {
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            
+            if (!userId) {
+                alert('Please enter your ID!');
+                return;
+            }
+            if (!password) {
+                alert ('Please enter your password!');
+                return;
+            }
+            
+            // Simple demo login - in real app, verify with server
+            currentUser = userId;
+            isLoggedIn = true;
+            
+            // Update UI
+            document.getElementById('currentUser').textContent = `Welcome, ${userId}`;
+            document.querySelector('.login-btn').textContent = '👤 Logout';
+            document.getElementById('loginModal').style.display = 'none';
+            
+            // Load user data (in real app, fetch from server)
+            loadUserData();
+            
+            alert(`Welcome ${userId}! You are now logged in.`);
+        }
+
+        function logout() {
+            currentUser = null;
+            isLoggedIn = false;
+            
+            // Reset UI
+            document.getElementById('currentUser').textContent = 'Guest User';
+            document.querySelector('.login-btn').textContent = '👤 Login';
+            
+            // Clear user data
+            userReservations = [];
+            userBookmarks = [];
+            userFines = [];
+            
+            // Return to home page
+            showPage('home');
+            
+            alert('You have been logged out.');
+        }
+
+        function loadUserData() {
+            // In real app, fetch from server
+            // For demo, initialize with sample data
+            if (currentUser === 'STU001') {
+                userReservations = [
+                    { id: 1, item: "Microscope", type: "equipment", date: "2025-12-05", time: "2:00 PM", status: "active" },
+                    { id: 2, item: "Physics Lab", type: "lab", date: "2025-12-06", time: "10:00 AM", status: "upcoming" }
+                ];
+                
+                userBookmarks = ["Engineering Materials Handbook", "Robotics Programming Basics"];
+                
+                userFines = [
+                    { reason: "Late equipment return", amount: 3, date: "2025-11-30" }
+                ];
+            }
+        }
+
+        // ====================
+        // EQUIPMENT MANAGEMENT
+        // ====================
+        function loadEquipment() {
+            const tableBody = document.getElementById('equipmentTable');
+            tableBody.innerHTML = '';
+            
+            equipmentData.forEach(equip => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${equip.name}</strong></td>
+                    <td>${equip.available}/${equip.total}</td>
+                    <td>${equip.location}</td>
+                    <td><span class="status status-${equip.status}">${equip.status.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="reserveEquipment(${equip.id})" 
+                                ${equip.available === 0 ? 'disabled' : ''}>
+                            Reserve
+                        </button>
+                        <button class="btn btn-sm" onclick="viewEquipmentDetails(${equip.id})">
+                            Details
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function reserveEquipment(equipId) {
+            if (!isLoggedIn) {
+                alert('Please login to make reservations');
+                toggleLogin();
+                return;
+            }
+            
+            const equipment = equipmentData.find(e => e.id === equipId);
+            if (!equipment || equipment.available === 0) {
+                alert('This equipment is not available for reservation');
+                return;
+            }
+            
+            // Get reservation details
+            const quantity = prompt(`How many ${equipment.name}s would you like to reserve? (Max: ${equipment.available})`, "1");
+            const qty = parseInt(quantity);
+            if (isNaN(qty) || qty < 1) {
+                alert("Invalid quantity. Please enter a number.");
+                return;
+            }
+            if (qty > equipment.available) {
+                alert(`You cannot reserve more than ${equipment.available} units.`);
+                return;
+            }
+            const date = prompt("Enter borrow date (YYYY-MM-DD):", "");
+            // Validate date
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+              alert("Invalid date format. Please use YYYY-MM-DD.");
+              return;
+            }
+            //Prevent past date
+            const today = new Date();
+            const selectedDate = new Date(date + "T00:00");
+            if (selectedDate < today.setHours(0,0,0,0)) {
+               alert("You cannot select a past date.");
+               return;
+            }
+
+
+            const time = prompt("Enter start borrow time (HH-MM):", "");
+            // Validate time format
+            if (!time || !/^\d{2}:\d{2}$/.test(time)) {
+               alert("Invalid time format. Please use HH:MM.");
+               return;
+            }
+            const now = new Date();
+            const bookingDateTime = new Date(date + "T" + time);
+            if (selectedDate.getTime() === now.setHours(0,0,0,0)) {
+            // Same day booking, check if time already past
+               if (bookingDateTime < new Date()) {
+                  alert("You cannot select a past time!");
+                  return;
+                }
+            }
+
+            // Validate return date/time
+            const returnDate = prompt ("Enter return date (YYYY-MM-DD):", "")
+            // Validate date
+            if (!returnDate || !/^\d{4}-\d{2}-\d{2}$/.test(returnDate)) {
+              alert("Invalid date format. Please use YYYY-MM-DD !");
+              return;
+            }
+            //Prevent past date
+            const futureDay = new Date();
+            const futureReturnDay = new Date(date + "T00:00");
+            if (selectedDate < today.setHours(0,0,0,0)) {
+               alert("You cannot select a past date.");
+               return;
+            }
+            // Ensure return date is after borrow date
+            if (futureReturnDay < selectedDate) {
+                alert("Return date or time must be AFTER the borrow date or time.");
+                return;
+            }
+
+
+            const returnTime = prompt ("Enter return time:", "")
+            // Validate time format
+            if (!returnTime || !/^\d{2}:\d{2}$/.test(returnTime)) {
+               alert("Invalid time format. Please use HH:MM.");
+               return;
+            }
+            const future = new Date();
+            const returnDateTime = new Date(date + "T" + time);
+            if (futureReturnDay.getTime() === now.setHours(0,0,0,0)) {
+            // Same day booking, check if time already past
+               if (returnDateTime < new Date()) {
+                  alert("You cannot select a past time.");
+                  return;
+                }
+            }
+
+
+
+            const purpose = prompt("Purpose of reservation:", "");
+            
+            if (quantity && date && time && purpose) {
+                 // Update equipment availability
+                equipment.available -= qty;
+                if (equipment.available < 0) equipment.available = 0;
+                if (equipment.available=== 0) {
+                    equipment.status= "in-use";
+                }
+                else {
+                    equipment.status= "available"
+                }
+
+
+                // Create reservation
+                const reservation = {
+                    id: userReservations.length + 1,
+                    item: equipment.name,
+                    type: "equipment",
+                    quantity: parseInt(quantity),
+                    borrowDate: date,
+                    borrowTime: time,
+                    returnDate: returnDate,
+                    returnTime: returnTime,
+                    purpose: purpose,
+                    status: "upcoming"
+                };
+                
+                userReservations.push(reservation);
+                
+                
+                
+                // Show confirmation
+                alert(`Reservation confirmed!\n${equipment.name} x${quantity}\nDate: ${date} ${time}\nPurpose: ${purpose}`);
+                
+                // Reload equipment list
+                loadEquipment();
+                updateDashboard();
+            }
+        }
+
+        // ====================
+        // LAB MANAGEMENT
+        // ====================
+        function loadLabs() {
+            const tableBody = document.getElementById('labsTable');
+            tableBody.innerHTML = '';
+            
+            labsData.forEach(lab => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${lab.name}</strong></td>
+                    <td>${lab.capacity} people</td>
+                    <td>${lab.schedule}</td>
+                    <td><span class="status status-${lab.status}">${lab.status.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="reserveLab(${lab.id})" 
+                                ${lab.status !== 'available' ? 'disabled' : ''}>
+                            Book Lab
+                        </button>
+                        <button class="btn btn-sm" onclick="viewLabSchedule(${lab.id})">
+                            Schedule
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function reserveLab(labId) {
+            if (!isLoggedIn) {
+                alert('Please login to book labs');
+                toggleLogin();
+                return;
+            }
+            
+            const lab = labsData.find(l => l.id === labId);
+            if (!lab || lab.status !== 'available') {
+                alert('This lab is not available for booking');
+                return;
+            }
+            
+            // Get booking details
+            const date = prompt("Enter booking date (YYYY-MM-DD):","" );
+            // Validate date
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+              alert("Invalid date format. Please use YYYY-MM-DD.");
+              return;
+            }
+            //Prevent past date
+            const today = new Date();
+            const selectedDate = new Date(date + "T00:00");
+            if (selectedDate < today.setHours(0,0,0,0)) {
+               alert("You cannot select a past date.");
+               return;
+            }
+
+
+            const startTime = prompt("Start time:", "" );
+            // Validate time format
+            if (!startTime || !/^\d{2}:\d{2}$/.test(startTime)) {
+               alert("Invalid time format. Please use HH:MM.");
+               return;
+            }
+            //Prevent past time if booking today
+            const now = new Date();
+            const bookingDateTime = new Date(date + "T" + startTime);
+            if (selectedDate.getTime() === now.setHours(0,0,0,0)) {
+            // Same day booking, check if time already past
+               if (bookingDateTime < new Date()) {
+                  alert("You cannot select a past time.");
+                  return;
+                }
+            }
+
+            const endTime = prompt("End time:", "" );
+            // Validate time format
+            if (!endTime || !/^\d{2}:\d{2}$/.test(endTime)) {
+               alert("Invalid time format. Please use HH:MM.");
+               return;
+            }
+
+            const purpose = prompt("Purpose of booking:","" );
+
+            const attendees = prompt("Number of attendees:", "" );
+            const numAttendees = parseInt(attendees);
+            if (isNaN(numAttendees) || numAttendees < 1) {
+                alert("Invalid number of attendees.");
+                return;
+            }
+            if (numAttendees > lab.capacity) {
+                alert(`This lab only allows up to ${lab.capacity} people.`);   
+                return;
+            }
+            
+            if (date && startTime && endTime && purpose && attendees) {
+                // Check for schedule conflicts (simplified)
+                const hasConflict = userReservations.some(r => 
+                    r.type === 'lab' && 
+                    r.item === lab.name && 
+                    r.date === date &&
+                    ((startTime >= r.startTime && startTime < r.endTime) ||
+                     (endTime > r.startTime && endTime <= r.endTime))
+                );
+                
+                if (hasConflict) {
+                    alert('Schedule conflict detected! Please choose another time slot.');
+                    return;
+                }
+                
+                // Create reservation
+                const reservation = {
+                    id: userReservations.length + 1,
+                    item: lab.name,
+                    type: "lab",
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime,
+                    purpose: purpose,
+                    attendees: numAttendees,
+                    status: "upcoming"
+                };
+                
+                // Reduce lab capacity by number of attendees booked
+                lab.capacity -= numAttendees;
+                // If lab capacity hits 0, mark as full
+                if (lab.capacity< 0) {
+                    lab.capacity= 0;
+                }
+                if (lab.capacity=== 0) {
+                    lab.status= "full-reserved";
+                }
+                else {
+                    lab.status= "available";
+                }
+                
+
+                userReservations.push(reservation);
+                
+                
+                
+                // Show confirmation
+                alert(`Lab booking confirmed!\n${lab.name}\nDate: ${date}\nTime: ${startTime} - ${endTime}\nPurpose: ${purpose}`);
+                
+                // Reload labs list
+                loadLabs();
+                updateDashboard();
+            }
+        }
+
+        // ====================
+        // RESOURCES MANAGEMENT
+        // ====================
+        function loadResources() {
+            const container = document.getElementById('resourcesList');
+            container.innerHTML = '';
+            
+            resourcesData.forEach(resource => {
+                const isBookmarked = userBookmarks.includes(resource.title);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${resource.title}</h3>
+                    <p><small>Type: ${resource.type} | Category: ${resource.category}</small></p>
+                    <button class="btn ${isBookmarked ? 'btn-warning' : 'btn-primary'} btn-sm" 
+                            onclick="toggleBookmark('${resource.title}')">
+                        ${isBookmarked ? '⭐ Bookmarked' : '☆ Bookmark'}
+                    </button>
+                    <button class="btn btn-sm" onclick="viewResource('${resource.id}')">
+                        View Details
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function searchResources() {
+            const searchTerm = document.getElementById('searchResources').value.toLowerCase();
+            const filtered = resourcesData.filter(resource => 
+                resource.title.toLowerCase().includes(searchTerm) ||
+                resource.category.toLowerCase().includes(searchTerm) ||
+                resource.type.toLowerCase().includes(searchTerm)
+            );
+            
+            const container = document.getElementById('resourcesList');
+            container.innerHTML = '';
+            
+            filtered.forEach(resource => {
+                const isBookmarked = userBookmarks.includes(resource.title);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${resource.title}</h3>
+                    <p><small>Type: ${resource.type} | Category: ${resource.category}</small></p>
+                    <button class="btn ${isBookmarked ? 'btn-warning' : 'btn-primary'} btn-sm" 
+                            onclick="toggleBookmark('${resource.title}')">
+                        ${isBookmarked ? '⭐ Bookmarked' : '☆ Bookmark'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleBookmark(title) {
+            if (!isLoggedIn) {
+                alert('Please login to bookmark resources');
+                toggleLogin();
+                return;
+            }
+            
+            const index = userBookmarks.indexOf(title);
+            if (index === -1) {
+                userBookmarks.push(title);
+                alert('Resource bookmarked!');
+            } else {
+                userBookmarks.splice(index, 1);
+                alert('Bookmark removed');
+            }
+            
+            loadResources();
+            updateDashboard();
+        
+        }
+
+    function updateReservationStatus() {
+    const now = new Date();
+
+    userReservations.forEach(res => {
+        if (res.type === "equipment") {
+            const borrowDateTime = new Date(res.borrowDate + "T" + res.borrowTime);
+            const returnDateTime = new Date(res.returnDate + "T" + res.returnTime);
+
+            if (now >= borrowDateTime && now <= returnDateTime) {
+                res.status = "in-use";
+                const equipment = equipmentData.find(e => e.name === res.item);
+                if (equipment) equipment.status = "in-use";
+            }
+            // Before borrow period
+            else if (now < borrowDateTime) {
+                res.status = "upcoming";
+                const equipment = equipmentData.find(e => e.name === res.item);
+                if (equipment && equipment.available > 0) equipment.status = "available";
+            }
+
+            // After return time
+            if (now > returnDateTime && res.status !== "completed") {
+                res.status = "overdue";
+                const equipment = equipmentData.find(e => e.name === res.item);
+                if (equipment) equipment.status = equipment.available > 0 ? "available" : "in-use";
+            }
+        }
+
+        if (res.type === "lab") {
+            const startTime = new Date(res.date + "T" + res.startTime);
+            const endTime = new Date(res.date + "T" + res.endTime);
+
+            if (now >= startTime && now <= endTime) {
+                res.status = "in-use";
+                const lab = labsData.find(l => l.name === res.item);
+                if (lab) lab.status = "available";
+            }
+            else if (now < startTime) {
+                res.status = "upcoming";
+                const lab = labsData.find(l => l.name === res.item);
+                if (lab) lab.status = "available";
+            }
+
+            if (now > endTime && res.status !== "completed") {
+                res.status = "overdue";
+                const lab = labsData.find(l => l.name === res.item);
+                if (lab) lab.status = "available";
+            }
+        }
+    });
+}
+
+
+        // ====================
+        // DASHBOARD FUNCTIONS
+        // ====================
+        function updateDashboard() {
+            updateReservationStatus();
+            // Update statistics
+            document.getElementById('totalReservations').textContent = userReservations.length;
+            
+            const active = userReservations.filter(r => r.status === 'active').length;
+            document.getElementById('activeBookings').textContent = active;
+            
+            document.getElementById('bookmarksCount').textContent = userBookmarks.length;
+            
+            const totalFines = userFines.reduce((sum, fine) => sum + fine.amount, 0);
+            document.getElementById('finesAmount').textContent = `RM ${totalFines}`;
+            
+            // Update recent reservations
+            const recentContainer = document.getElementById('recentReservations');
+            if (userReservations.length > 0) {
+                recentContainer.innerHTML = userReservations.slice(0, 3).map(res => `
+                    <p><strong>${res.item}</strong> - ${res.date} ${res.time || ''} (${res.status})</p>
+                `).join('');
+            }
+            
+            // Update bookmarks list
+            const bookmarksList = document.getElementById('bookmarkedList');
+            bookmarksList.innerHTML = userBookmarks.map(bookmark => 
+                `<li>${bookmark}</li>`
+            ).join('');
+        }
+
+        // ====================
+        // RESERVATIONS MANAGEMENT
+        // ====================
+        function loadUserReservations() {
+            const tableBody = document.getElementById('myReservationsTable');
+            tableBody.innerHTML = '';
+            
+            if (userReservations.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center;">No reservations found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            userReservations.forEach(reservation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${reservation.item} ${reservation.quantity ? `(x${reservation.quantity})` : ''}</td>
+                    <td>${reservation.type}</td>
+                    <td>
+                        ${reservation.type === 'equipment' 
+                        ? `${reservation.borrowDate} ${reservation.borrowTime} → Return: ${reservation.returnDate} ${reservation.returnTime}` 
+                        : `${reservation.date} ${reservation.startTime}-${reservation.endTime}`}
+                    </td>
+
+                    <td><span class="status status-${reservation.status}">${reservation.status}</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="cancelReservation(${reservation.id})">
+                            Cancel
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Update fines display
+            const finesContainer = document.getElementById('finesDetails');
+            if (userFines.length > 0) {
+                finesContainer.innerHTML = userFines.map(fine => `
+                    <p><strong>${fine.reason}</strong> - RM ${fine.amount} (${fine.date})</p>
+                `).join('');
+            }
+        }
+
+        function cancelReservation(reservationId) {
+            const index = userReservations.findIndex(r => r.id === reservationId);
+            if (index === -1) return;
+            const reservation = userReservations[index];
+            const now = new Date();
+            let bookingStart;
+            if (reservation.type === "equipment") {
+                bookingStart = new Date(reservation.borrowDate + "T" + reservation.borrowTime);
+            } 
+            else if (reservation.type === "lab") {
+                     bookingStart = new Date(reservation.date + "T" + reservation.startTime);
+            }
+            // Prevent cancel if booking period has started
+            if (now >= bookingStart) {
+            alert("You cannot cancel this reservation after the booking period has started. Please contact the admin.");
+            return;
+            }
+            if (confirm('Are you sure you want to cancel this reservation?')) {
+                const index = userReservations.findIndex(r => r.id === reservationId);
+                if (index !== -1) {
+                    const reservation = userReservations[index];
+                    
+                    // Update equipment or lab availability
+                    if (reservation.type === 'equipment') {
+                        const equipment = equipmentData.find(e => e.name === reservation.item);
+                        if (equipment) {
+                            equipment.available += reservation.quantity || 1;
+                        }
+                    } else if (reservation.type === 'lab') {
+                        const lab = labsData.find(l => l.name === reservation.item);
+                        if (lab) {
+                            lab.status = 'available';
+                        }
+                    }
+                    
+                    userReservations.splice(index, 1);
+                    alert('Reservation cancelled successfully');
+                    
+                    // Reload data
+                    loadUserReservations();
+                    loadEquipment();
+                    loadLabs();
+                    updateDashboard();
+                }
+            }
+        }
+
+        // ====================
+        // HELPER FUNCTIONS
+        // ====================
+        function viewEquipmentDetails(equipId) {
+            const equipment = equipmentData.find(e => e.id === equipId);
+            if (equipment) {
+                alert(`Equipment Details:\n\nName: ${equipment.name}\nAvailable: ${equipment.available}/${equipment.total}\nLocation: ${equipment.location}\nStatus: ${equipment.status}\n\nSafety Guidelines:\n1. Handle with care\n2. Clean after use\n3. Report any damage immediately`);
+            }
+        }
+
+        function viewLabSchedule(labId) {
+            const lab = labsData.find(l => l.id === labId);
+            if (lab) {
+                alert(`Lab Schedule:\n\nName: ${lab.name}\nSchedule: ${lab.schedule}\nCapacity: ${lab.capacity} people\n\nInstructions:\n1. Book in advance\n2. Maximum 4 hours per booking\n3. Clean up after use\n4. Follow safety protocols`);
+            }
+        }
+
+        function viewResource(resourceId) {
+            const resource = resourcesData.find(r => r.id === resourceId);
+            if (resource) {
+                alert(`Resource Details:\n\nTitle: ${resource.title}\nType: ${resource.type}\nCategory: ${resource.category}\n\nDescription: This resource contains valuable information for ${resource.category} studies.`);
+            }
+        }
+
+        // ====================
+        // INITIALIZATION
+        // ====================
+        function initializeApp() {
+            // Load initial data
+            loadEquipment();
+            loadLabs();
+            loadResources();
+            updateDashboard();
+            
+            // Set demo user data for testing
+            setTimeout(() => {
+                if (!isLoggedIn) {
+                    document.getElementById('currentUser').textContent = 'Demo Mode - Click Login';
+                }
+            }, 1000);
+        }
+
+        // AUTO FINE SYSTEM
+        function checkForAutoFines() {
+            const now = new Date();
+            userReservations.forEach(res => {
+               // --- Equipment fine calculation ---
+               if (res.type === "equipment" && res.returnDate && res.returnTime && res.status !== "completed") {
+                  const returnDateTime = new Date(res.returnDate + "T" + res.returnTime);
+                  if (now > returnDateTime) {
+                     res.status = "overdue";
+                     if (!res.finedHours) res.finedHours = 0;
+                     const totalHoursLate = Math.floor((now - returnDateTime) / (1000 * 60 * 60));
+                     const newHoursToFine = totalHoursLate - res.finedHours;
+                     if (newHoursToFine > 0) {
+                        const fineAmount = newHoursToFine * 1;
+                        userFines.push({
+                           reason: `${res.item} returned late`,
+                           amount: fineAmount,
+                           date: now.toISOString().split("T")[0]
+                    });
+
+                    res.finedHours = totalHoursLate;
+                }
+            }
+        }
+
+        // --- Lab fine calculation ---
+        if (res.type === "lab" && res.endTime && res.status !== "completed") {
+            const labEndTime = new Date(res.date + "T" + res.endTime);
+
+            if (now > labEndTime) {
+                res.status = "overdue";
+
+                if (!res.finedHours) res.finedHours = 0;
+
+                const totalHoursLate = Math.floor((now - labEndTime) / (1000 * 60 * 60));
+                const newHoursToFine = totalHoursLate - res.finedHours;
+
+                if (newHoursToFine > 0) {
+                    const fineAmount = newHoursToFine * 5;
+
+                    userFines.push({
+                        reason: `${res.item} lab overtime`,
+                        amount: fineAmount,
+                        date: now.toISOString().split("T")[0]
+                    });
+
+                    res.finedHours = totalHoursLate;
+                }
+            }
+        }
+
+    });
+}
+
+
+
+
+    
+// Call every 1 minute (60000 ms)
+setInterval(() => {
+    updateReservationStatus();
+    loadUserReservations();
+    updateDashboard();
+    checkForAutoFines ();
+    }, 60000);
+
+    //updateDashboard();
+
+    //updateDashboard();
+
+        // Initialize when page loads
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>

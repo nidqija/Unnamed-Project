@@ -22,6 +22,18 @@ class UserItemReservation(models.Model):
      item_id = models.ForeignKey('Item' , on_delete=models.CASCADE)
      deadline_time = models.DateField()
 
+class RequestItem(models.Model):
+      request_id = models.AutoField(primary_key=True)
+      user_id = models.ForeignKey(User , on_delete=models.CASCADE)
+      item_name = models.CharField(max_length=100)
+      item_amount = models.IntegerField()
+      time_requested = models.TextField(null=True, blank=True)
+      request_date = models.DateField()
+      status = models.CharField(max_length=20, default='Pending')
+      admin_id = models.ForeignKey(Admin , on_delete=models.CASCADE , default=1)
+
+
+   
 
 class Item(models.Model):
     item_id = models.AutoField(primary_key=True)

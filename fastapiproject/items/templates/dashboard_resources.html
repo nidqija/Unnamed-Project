@@ -1,0 +1,47 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Resources - STEM Resource Access Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>📚 Learning Resources</h1>
+    <p>Search and bookmark educational materials.</p>
+
+    <div class="form-group">
+        <input type="text" id="searchResources" class="form-control"
+            placeholder="Search for books, manuals, or research papers..." onkeyup="searchResources()">
+        <!-- Logic likely needs AJAX or form submission -->
+    </div>
+
+    <div id="resourcesList" class="grid">
+        {% for resource in resources_list %}
+        <div class="card">
+            <h3>{{ resource.title }}</h3>
+            <p><small>Type: {{ resource.type }} | Category: {{ resource.category }}</small></p>
+            <button class="btn btn-primary btn-sm" onclick="toggleBookmark('{{ resource.title }}')">
+                ☆ Bookmark
+            </button>
+            <button class="btn btn-sm" onclick="viewResource('{{ resource.id }}')">
+                View Details
+            </button>
+        </div>
+        {% empty %}
+        <p>No resources available (Backend integration pending)</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function searchResources() {
+        console.log("Search functionality to be implemented with backend filter or AJAX");
+    }
+
+    function toggleBookmark(title) {
+        alert("Bookmark logic for: " + title);
+    }
+
+    function viewResource(resourceId) {
+        alert("View details for resource ID: " + resourceId);
+    }
+</script>
+{% endblock %}

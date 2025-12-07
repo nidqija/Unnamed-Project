@@ -114,7 +114,7 @@
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'admin_logout' %}">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -157,27 +157,48 @@
 </ul>
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-    <div class="container mt-3">
-     <div >
-    <div class="card mb-3">
-  <div class="card-body">
-    <h4>User Name</h4>
-  </div>
+   <div class="container mt-3">
+    {% for request_item in requests %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <!-- User Name -->
+                        <h5 class="fw-bold">{{ request_item.user_id.full_name }}</h5>
+                        <!-- Item Details -->
+                        <p class="mb-1">
+                            <strong>Item:</strong> {{ request_item.item_name }} <br>
+                            <strong>Amount:</strong> {{ request_item.item_amount }} <br>
+                            <strong>Date:</strong> {{ request_item.request_date }} <br>
+                            <strong>Time:</strong> {{ request_item.time_requested }}
+                        </p>
+                        <!-- Status -->
+                        <span class="badge 
+                            {% if request_item.status == 'Pending' %}bg-warning text-dark{% endif %}
+                            {% if request_item.status == 'Approved' %}bg-success text-white{% endif %}
+                            {% if request_item.status == 'Rejected' %}bg-danger text-white{% endif %}
+                        ">
+                            {{ request_item.status }}
+                        </span>
+                    </div>
+                    <!-- Optional: Admin Actions -->
+                    <div class="ms-3">
+                        <form method="post" action="{% url 'approve_request' request_item.request_id %}">
+                            {% csrf_token %}
+                            <button type="submit" name="status" value="Approved" class="btn btn-sm btn-success mb-1">Approve</button>
+                            <button type="submit" name="status" value="Rejected" class="btn btn-sm btn-danger">Reject</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">No requests available.</p>
+    {% endfor %}
 </div>
-  <div class="card mb-3">
-  <div class="card-body">
-        <h4>User Name</h4>
+   
+</div>
 
-  </div>
-</div>
-   <div class="card mb-3">
-  <div class="card-body">
-        <h4>User Name</h4>
-
-  </div>
-</div>
-</div>
-     </div>
 
   </div>
   <div class="container mt-3">

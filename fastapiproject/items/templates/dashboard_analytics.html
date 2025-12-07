@@ -1,0 +1,55 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Analytics - STEM Resource Access Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>📊 User Dashboard</h1>
+    <p>Your STEM resource usage analytics.</p>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-value" id="totalReservations">{{ total_reservations|default:"0" }}</div>
+            <div class="stat-label">Total Reservations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="activeBookings">{{ active_bookings|default:"0" }}</div>
+            <div class="stat-label">Active Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="bookmarksCount">{{ bookmarks_count|default:"0" }}</div>
+            <div class="stat-label">Bookmarks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="finesAmount">RM {{ fines_amount|default:"0" }}</div>
+            <div class="stat-label">Cumulative Fines</div>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h2>📅 Recent Reservations</h2>
+        <div id="recentReservations">
+            {% if recent_reservations %}
+            {% for res in recent_reservations %}
+            <p><strong>{{ res.item }}</strong> - {{ res.date }} ({{ res.status }})</p>
+            {% endfor %}
+            {% else %}
+            <p>No recent reservations</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>⭐ Bookmarked Resources</h2>
+        <ul id="bookmarkedList">
+            {% if bookmarked_list %}
+            {% for bookmark in bookmarked_list %}
+            <li>{{ bookmark }}</li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

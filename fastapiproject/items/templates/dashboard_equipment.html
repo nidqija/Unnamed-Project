@@ -1,0 +1,57 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Equipment - STEM Resource Access Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🔧 Laboratory Equipment</h1>
+    <p>Browse available equipment and make reservations.</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Equipment</th>
+                <th>Available</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="equipmentTable">
+            {% for equipment in equipment_list %}
+            <tr>
+                <td><strong>{{ equipment.name }}</strong></td>
+                <td>{{ equipment.available }}/{{ equipment.total }}</td>
+                <td>{{ equipment.location }}</td>
+                <td><span class="status status-{{ equipment.status }}">{{ equipment.status|upper }}</span></td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="reserveEquipment('{{ equipment.id }}')" {% if
+                        equipment.available==0 %}disabled{% endif %}>
+                        Reserve
+                    </button>
+                    <button class="btn btn-sm" onclick="viewEquipmentDetails('{{ equipment.id }}')">
+                        Details
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No equipment data available (Backend integration pending)</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function reserveEquipment(equipId) {
+        // Logic to be transitioned to backend form submission
+        alert("Reservation logic will be handled by the backend form: " + equipId);
+        // window.location.href = "/reserve/equipment/" + equipId; // Example future implementation
+    }
+
+    function viewEquipmentDetails(equipId) {
+        alert("Details for equipment ID: " + equipId);
+    }
+</script>
+{% endblock %}

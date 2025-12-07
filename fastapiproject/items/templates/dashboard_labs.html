@@ -1,0 +1,55 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Labs - STEM Resource Access Hub{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🏢 STEM Laboratories</h1>
+    <p>Schedule time in available laboratories.</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Lab Name</th>
+                <th>Capacity</th>
+                <th>Schedule</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="labsTable">
+            {% for lab in labs_list %}
+            <tr>
+                <td><strong>{{ lab.name }}</strong></td>
+                <td>{{ lab.capacity }} people</td>
+                <td>{{ lab.schedule }}</td>
+                <td><span class="status status-{{ lab.status }}">{{ lab.status|upper }}</span></td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="reserveLab('{{ lab.id }}')" {% if lab.status
+                        !='available' %}disabled{% endif %}>
+                        Book Lab
+                    </button>
+                    <button class="btn btn-sm" onclick="viewLabSchedule('{{ lab.id }}')">
+                        Schedule
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No labs data available (Backend integration pending)</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function reserveLab(labId) {
+        alert("Lab booking logic will be handled by the backend form: " + labId);
+    }
+
+    function viewLabSchedule(labId) {
+        alert("Schedule details for Lab ID: " + labId);
+    }
+</script>
+{% endblock %}

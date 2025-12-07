@@ -18,7 +18,7 @@
 <body>
     <h1 class="montserrat"><strong>Admin Login Page</strong></h1>
     <!-- Use action + method so the form submits normally; remove inline JS navigation -->
-    <form class="login-form"  method="post" action="{% url 'login' %}">
+    <form class="login-form"  method="post" action="{% url 'custom_admin_login' %}">
         {% csrf_token %}
        
         <div class="mb-3">
@@ -29,6 +29,10 @@
             <label class="form-label" for="admin_password">Password</label>
             <input type="password" class="form-control" id="admin_password" name="admin_password" required minlength="6">
         </div>
+
+        <p class="text-center text-muted">
+            <a href="{% url 'user_login' %}" class="text-success fw-semibold">Login as User</a>
+        </p>
 
         <button type="submit" class="btn btn-primary">Submit</button>
 
