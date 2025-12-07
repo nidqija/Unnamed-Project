@@ -156,9 +156,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for request_item in requestitem %}
                                 <tr>
                                     <td>
-                                        {% for request_item in requestitem %}
                                        {{ request_item.item_name }}
                                      
                                     </td>

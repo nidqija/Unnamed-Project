@@ -37,14 +37,27 @@ def admin_dashboard(request):
     })
 
 
-def approve_request(request,request_id):
+def approve_request(request, request_id):
     try:
         request_item = RequestItem.objects.get(request_id=request_id)
-        request_item.status = 'Approved'
+        item = Item.objects.filter(item_name=request_item.item_name).first()
+        
+        if item is None:
+            request_item.status = 'Rejected'
+        elif item.item_amount >= request_item.item_amount:
+            item.item_amount -= request_item.item_amount
+            item.save()
+            request_item.status = 'Approved'
+        else:
+            request_item.status = 'Rejected'
+
         request_item.save()
-        return redirect('admin_dashboard')
     except RequestItem.DoesNotExist:
-        return redirect('admin_dashboard')
+        pass  # Nothing to do if request does not exist
+
+    return redirect('admin_dashboard')
+
+
     
 
 def admin_logout(request):
