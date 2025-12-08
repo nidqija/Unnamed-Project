@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - STEM Resource Hub</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -59,7 +56,6 @@
 
 <body>
 
-    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
@@ -72,7 +68,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="hero-section">
         <div class="container text-center">
             <h1 class="display-4 fw-bold mb-3">Resource Dashboard</h1>
@@ -80,11 +75,9 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container pb-5">
         <div class="row g-4">
 
-            <!-- Reserve Equipment Card -->
             <div class="col-md-6 col-lg-4">
                 <div class="card p-4">
                     <div class="card-body text-center">
@@ -101,7 +94,6 @@
                 </div>
             </div>
 
-            <!-- Book Labs Card -->
             <div class="col-md-6 col-lg-4">
                 <div class="card p-4">
                     <div class="card-body text-center">
@@ -117,29 +109,108 @@
                 </div>
             </div>
 
-            <!-- Check Status Card -->
             <div class="col-md-6 col-lg-4">
                 <div class="card p-4">
                     <div class="card-body text-center">
                         <div class="icon-box bg-warning bg-opacity-10 text-warning mx-auto">
-                            <i class="fas fa-clipboard-list"></i>
+                            <i class="fas fa-book"></i>
                         </div>
-                        <h3 class="card-title fw-bold">My Status</h3>
-                        <p class="card-text text-muted mb-4">View your active reservations, history, and any outstanding
-                            fines.</p>
-                        <!-- For now, we link back to dashboard or a status page if created later. 
-                             Since user asked for simplified "one dashboard", maybe this just stays here or links to a section?
-                             I'll link to itself for now or maybe a future anchor. -->
-                        <button class="btn btn-warning btn-custom w-100 text-white" disabled>
-                            Coming Soon
-                        </button>
+                        <h3 class="card-title fw-bold">Reading Materials</h3>
+                        <p class="card-text text-muted mb-4">Browse and bookmark reading materials for your studies.</p>
+                        <a href="{% url 'browse_materials' %}" class="btn btn-warning btn-custom w-100 text-white">
+                            Browse Materials <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-4">
+                    <div class="card-body text-center">
+                        <div class="icon-box bg-info bg-opacity-10 text-info mx-auto">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3 class="card-title fw-bold">Venue Availability</h3>
+                        <p class="card-text text-muted mb-4">Check available time slots for lab venues.</p>
+                        <a href="{% url 'venue_availability' %}" class="btn btn-info btn-custom w-100 text-white">
+                            View Availability <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Recent Activity Section (Static for now) -->
+        {% if user_fines %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card p-4 border-danger">
+                    <h4 class="fw-bold mb-4 text-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Outstanding Fines
+                    </h4>
+                    <div class="alert alert-danger">
+                        <strong>Total Amount Due:</strong> ${{ user_total_fines|floatformat:2 }}
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Reason</th>
+                                    <th>Amount</th>
+                                    <th>Issue Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fine in user_fines %}
+                                <tr>
+                                    <td>{{ fine.fine_reason }}</td>
+                                    <td>${{ fine.fine_amount|floatformat:2 }}</td>
+                                    <td>{{ fine.issue_date }}</td>
+                                    <td><span class="badge bg-danger">{{ fine.status }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card p-4">
+                    <h4 class="fw-bold mb-4">My Bookmarked Materials</h4>
+                    {% if user_bookmarks %}
+                    <div class="row g-3">
+                        {% for bookmark in user_bookmarks %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card border">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ bookmark.material_id.title }}</h5>
+                                    <p class="card-text text-muted small mb-2">
+                                        <strong>Author:</strong> {{ bookmark.material_id.author|default:"Unknown" }}<br>
+                                        {% if bookmark.material_id.category %}
+                                        <strong>Category:</strong> {{ bookmark.material_id.category }}<br>
+                                        {% endif %}
+                                        <strong>Bookmarked:</strong> {{ bookmark.date_bookmarked }}
+                                    </p>
+                                    <a href="{% url 'remove_bookmark' bookmark.bookmark_id %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-bookmark"></i> Remove Bookmark
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No bookmarked materials yet. <a href="{% url 'browse_materials' %}">Browse materials</a> to bookmark.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         <div class="row mt-5">
             <div class="col-12">
                 <div class="card p-4">
@@ -158,18 +229,39 @@
                             <tbody>
                                 {% for request_item in requestitem %}
                                 <tr>
-                                    <td>
-                                       {{ request_item.item_name }}
-                                     
-                                    </td>
+                                    <td>{{ request_item.item_name }}</td>
                                     <td>Equipment</td>
-                                     <td>{{request_item.request_date}}</td>
-                                    <td>{{request_item.time_requested}}</td>
-                                    <td><span >{{request_item.status}}</span></td>
-                                     
-                                       {% endfor %}
+                                    <td>{{ request_item.request_date }}</td>
+                                    <td>{{ request_item.time_requested }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if request_item.status == 'Pending' %}bg-warning text-dark{% endif %}
+                                            {% if request_item.status == 'Approved' %}bg-success text-white{% endif %}
+                                            {% if request_item.status == 'Rejected' %}bg-danger text-white{% endif %}
+                                        ">{{ request_item.status }}</span>
+                                    </td>
                                 </tr>
-                              
+                                {% endfor %}
+                                {% for venue_request in requestvenue %}
+                                <tr>
+                                    <td>{{ venue_request.venue_name }}</td>
+                                    <td>Lab Venue</td>
+                                    <td>{{ venue_request.request_date }}</td>
+                                    <td>{{ venue_request.time_requested }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if venue_request.status == 'Pending' %}bg-warning text-dark{% endif %}
+                                            {% if venue_request.status == 'Approved' %}bg-success text-white{% endif %}
+                                            {% if venue_request.status == 'Rejected' %}bg-danger text-white{% endif %}
+                                        ">{{ venue_request.status }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if not requestitem and not requestvenue %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No reservations yet.</td>
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -178,7 +270,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
