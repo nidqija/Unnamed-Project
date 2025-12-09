@@ -47,7 +47,9 @@ A centralized web platform designed to streamline access to university STEM reso
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/stem-resource-access-hub.git
-cd stem-resource-access-hub
+git clone https://github.com/nidqija/STEM-Hub.git
+cd fastapiproject
+.venv\Scripts\activate
+python manage.py runserver
 ```
 
